@@ -1,0 +1,11 @@
+version: "1"
+name: wordgames
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+  jenkins:
+    image: "jenkins/jenkins"
+    ports:
+      - "8080:8080"

@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 def test_scores_service(web_url="http://127.0.0.1:5000/"):
-    driver = webdriver.Edge()
+    driver = webdriver.Chrome()
     driver.get(web_url)
     score = driver.find_element(By.ID, "score").text
     score = int(score)

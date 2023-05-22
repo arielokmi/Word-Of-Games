@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+      DOCKERHUB_CREDENTIALS = credentials('docker-hub')
+    }
     stages {
         stage('Checkout')
         {
@@ -11,28 +14,31 @@ pipeline {
         stage('Bulid')
         {
             steps {
-               bat 'docker build -t docker_build .'
+               bat 'docker build -t arielokmi/wordgames .'
             }
         }
         stage('Run')
         {
             steps {
 
-                bat 'docker run --name docker_run -p 8777:8080  -i -t -d  docker_build'
+                bat 'docker run --name docker_run_test -p 8777:8080  -i -t -d  arielokmi/wordgames'
             }
         }
         stage('Test'){
             steps{
                 script{
-                    bat 'docker exec  docker_run /bin/bash'
+                    bat 'docker exec  docker_run_test /bin/bash'
                     bat  'python ./Tests/e2e.py'
                 }
             }
         }
-    }
-    post {
-        always {
-            bat 'docker kill docker_run'
+        stage('Finalize'){
+            steps{
+                withDockerRegistry([ credentialsId: "docker-hub", url: "" ]) {
+                    bat 'docker push arielokmi/wordgames:latest'
+                }
+                bat 'docker kill docker_run_test'
+                }
+            }
         }
     }
-}

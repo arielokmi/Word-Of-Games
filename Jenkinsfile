@@ -21,7 +21,7 @@ pipeline {
         {
             steps {
 
-                bat 'docker run --name docker_run_test -p 8777:8080  -i -t -d  arielokmi/wordgames'
+                bat 'docker run --name docker_run_test -p 8777:8080 -v Scores_volume:/app/Scores.txt  -i -t -d  arielokmi/wordgames'
             }
         }
         stage('Test'){

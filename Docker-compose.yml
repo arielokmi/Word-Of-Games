@@ -5,7 +5,21 @@ services:
     build: .
     ports:
       - "5000:5000"
-  jenkins:
-    image: "jenkins/jenkins"
+
+  db:
+    image: "mysql"
+    command: '--default-authentication-plugin=mysql_native_password'
+    restart: 'always'
+    environment:
+      MYSQL_ROOT_PASSWORD: 'example'
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
     ports:
-      - "8080:8080"
+      - "3306:3306"
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+volumes:
+  my-db:
